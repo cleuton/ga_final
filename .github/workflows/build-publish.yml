@@ -46,8 +46,8 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: modules
+      working-directory: ./modules
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: modules
+      working-directory: ./modules
