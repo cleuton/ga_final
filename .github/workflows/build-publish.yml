@@ -1,0 +1,53 @@
+name: Docker Build Push Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  # Compila e cria a imagem Docker, fazendo push no Docker Hub
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Out Repo
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./context
+        file: ./Dockerfile
+        push: true
+        tags: cleutonsampaio/pythondemo:latest
+  
+  # Faz deploy da aplicação, com  a nova imagem no k8s
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Set up Kubeconfig 
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      run: |
+        mkdir -p $HOME/.kube 
+        echo "$KUBE_CONFIG_DATA" | base64 -d > $HOME/.kube/config
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: modules
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: modules
