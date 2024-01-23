@@ -23,7 +23,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./context
-        file: Dockerfile
+        file: ./context/Dockerfile
         push: true
         tags: cleutonsampaio/pythondemo:latest
   
