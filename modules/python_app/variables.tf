@@ -11,7 +11,7 @@ variable "app_image" {
 variable "app_replicas" {
   description = "Número de réplicas da aplicação"
   type        = number
-  default     = 2
+  default     = 4
 }
 
 variable "app_port" {

@@ -6,7 +6,7 @@ provider "kubernetes" {
 # Configura o backend para armazenar o estado do terraform
 terraform {
   backend "kubernetes" {
-    secret_suffix    = "state"
+    secret_suffix    = "state-python"
     config_path      = "~/.kube/config"
   }
 }
