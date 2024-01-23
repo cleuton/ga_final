@@ -12,7 +12,7 @@ terraform {
 }
 
 module "python_app" {
-  source       = "./modules/python_app"
+  source       = "./python_app"
   app_name     = "minha-app-python"
   app_image    = "cleutonsampaio/pythondemo:latest"
   app_port     = 5000
@@ -22,7 +22,7 @@ module "python_app" {
 }
 
 module "postgres_db" {
-  source       = "./modules/postgres_db"
+  source       = "./postgres_db"
   db_name      = "postgres"
   db_user      = "postgres"
   db_password  = "password"
